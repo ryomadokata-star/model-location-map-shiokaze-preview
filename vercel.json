@@ -1,0 +1,14 @@
+{
+  "rewrites": [
+    { "source": "/api/import", "destination": "/api/import.js" },
+    { "source": "/(.*)", "destination": "/$1" }
+  ],
+  "headers": [
+    {
+      "source": "/(.*)",
+      "headers": [
+        { "key": "X-Robots-Tag", "value": "noindex, nofollow" }
+      ]
+    }
+  ]
+}
