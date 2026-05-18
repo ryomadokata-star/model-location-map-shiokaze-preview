@@ -37,71 +37,79 @@ document.head.append(Object.assign(document.createElement("style"), { textConten
 document.body.dataset.view = view;
 
 function faceStyle(m) {
-    return m.name === "\u9ad8\u7530\u3086\u3046\u304d" ? "--face-zoom:1.18;--face-x:50%;--face-y:0%" : "--face-zoom:1;--face-x:50%;--face-y:20%";
+      return m.name === "\u9ad8\u7530\u3086\u3046\u304d" ? "--face-zoom:1.18;--face-x:50%;--face-y:0%" : "--face-zoom:1;--face-x:50%;--face-y:20%";
 }
 function seed() {
-    models = [
-      { id:"m1", name:"\u9752\u5c71 \u308a\u3053", photoUrl:"https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=240&q=80", status:"shooting", publishStatus:"ok", snsUrl:"https://example.com/riko", mapX:38, mapY:42, parts:["1\u90e8"] },
-      { id:"m2", name:"\u767d\u77f3 \u307e\u306a", photoUrl:"https://images.unsplash.com/photo-1524504388940-b1c1722653e1?auto=format&fit=crop&w=240&q=80", status:"break", publishStatus:"confirm", snsUrl:"https://example.com/mana", mapX:66, mapY:58, parts:["1\u90e8"] },
-      { id:"m3", name:"\u6708\u91ce \u3042\u304b\u308a", photoUrl:"https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=240&q=80", status:"preparing", publishStatus:"ng", snsUrl:"https://example.com/akari", mapX:24, mapY:70, parts:["1\u90e8"] }
-        ];
-    selected = models[0].id;
+      models = [
+          { id:"m1", name:"\u9752\u5c71 \u308a\u3053", photoUrl:"https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=240&q=80", status:"shooting", publishStatus:"ok", snsUrl:"https://example.com/riko", mapX:38, mapY:42, parts:["1\u90e8"] },
+          { id:"m2", name:"\u767d\u77f3 \u307e\u306a", photoUrl:"https://images.unsplash.com/photo-1524504388940-b1c1722653e1?auto=format&fit=crop&w=240&q=80", status:"break", publishStatus:"confirm", snsUrl:"https://example.com/mana", mapX:66, mapY:58, parts:["1\u90e8"] },
+          { id:"m3", name:"\u6708\u91ce \u3042\u304b\u308a", photoUrl:"https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=240&q=80", status:"preparing", publishStatus:"ng", snsUrl:"https://example.com/akari", mapX:24, mapY:70, parts:["1\u90e8"] }
+            ];
+      selected = models[0].id;
 }
 function unlock() {
-    if (params.get("key") === KEY || localStorage.getItem("model-map-access") === KEY) {
-          localStorage.setItem("model-map-access", KEY);
-          $("#accessGate").style.display = "none";
-    }
+      if (params.get("key") === KEY || localStorage.getItem("model-map-access") === KEY) {
+              localStorage.setItem("model-map-access", KEY);
+              $("#accessGate").style.display = "none";
+      }
 }
 function badge(m) {
-    return '<span class="status-badge">'+(labels[m.status]||labels.preparing)+'</span><span class="publish-badge '+(m.publishStatus||"confirm")+'">'+(publish[m.publishStatus]||publish.confirm)+'</span>';
+      return '<span class="status-badge">'+(labels[m.status]||labels.preparing)+'</span><span class="publish-badge '+(m.publishStatus||"confirm")+'">'+(publish[m.publishStatus]||publish.confirm)+'</span>';
 }
 function sns(m) {
-    const u = m.snsUrl || m.detailUrl || m.sourceUrl || "";
-    return u ? '<a class="sns-link" href="'+u+'" target="'+(view==="customer"?"_self":"_blank")+'" rel="noopener">SNS\u3092\u898b\u308b</a>' : '<span class="meta">SNS\u672a\u767b\u9332</span>';
+      const u = m.snsUrl || m.detailUrl || m.sourceUrl || "";
+      return u ? '<a class="sns-link" href="'+u+'" target="'+(view==="customer"?"_self":"_blank")+'" rel="noopener">SNS\u3092\u898b\u308b</a>' : '<span class="meta">SNS\u672a\u767b\u9332</span>';
 }
 function render() {
-    const q = ($("#search")?.value || "").trim().toLowerCase();
-    const list = models.filter(m => !q || m.name.toLowerCase().includes(q));
-    $("#markers").innerHTML = list.map(m => '<button class="model-marker" data-id="'+m.id+'" style="left:'+m.mapX+'%;top:'+m.mapY+'%;'+faceStyle(m)+'"><div class="ring"><img src="'+m.photoUrl+'" alt=""></div><span>'+m.name+'</span></button>').join("");
-    $("#modelList").innerHTML = list.map(m => '<article class="model-card" data-id="'+m.id+'" style="'+faceStyle(m)+'"><img src="'+m.photoUrl+'" alt=""><div><strong>'+m.name+'</strong><br>'+badge(m)+'<div>'+sns(m)+'</div><p class="meta extra">\u51fa\u6f14\u90e8: '+(m.parts||["1\u90e8"]).join(" / ")+'</p></div></article>').join("");
-    const m = models.find(x => x.id === selected) || list[0] || models[0];
-    if (!m) return;
-    selected = m.id;
-    $("#detail").innerHTML = '<img src="'+m.photoUrl+'" alt="" style="'+faceStyle(m)+'"><div><h2>'+m.name+'</h2>'+badge(m)+'<p class="meta">\u3053\u306e\u8fba\u306b\u3044\u307e\u3059</p>'+sns(m)+'<p class="meta extra">\u6700\u7d42\u66f4\u65b0: '+new Date().toLocaleTimeString("ja-JP")+'</p></div>';
+      const q = ($("#search")?.value || "").trim().toLowerCase();
+      const list = models.filter(m => !q || m.name.toLowerCase().includes(q));
+      $("#markers").innerHTML = list.map(m => '<button class="model-marker" data-id="'+m.id+'" style="left:'+m.mapX+'%;top:'+m.mapY+'%;'+faceStyle(m)+'"><div class="ring"><img src="'+m.photoUrl+'" alt=""></div><span>'+m.name+'</span></button>').join("");
+      $("#modelList").innerHTML = list.map(m => '<article class="model-card" data-id="'+m.id+'" style="'+faceStyle(m)+'"><img src="'+m.photoUrl+'" alt=""><div><strong>'+m.name+'</strong><br>'+badge(m)+'<div>'+sns(m)+'</div><p class="meta extra">\u51fa\u6f14\u90e8: '+(m.parts||["1\u90e8"]).join(" / ")+'</p></div></article>').join("");
+      const m = models.find(x => x.id === selected) || list[0] || models[0];
+      if (!m) return;
+      selected = m.id;
+      $("#detail").innerHTML = '<img src="'+m.photoUrl+'" alt="" style="'+faceStyle(m)+'"><div><h2>'+m.name+'</h2>'+badge(m)+'<p class="meta">\u3053\u306e\u8fba\u306b\u3044\u307e\u3059</p>'+sns(m)+'<p class="meta extra">\u6700\u7d42\u66f4\u65b0: '+new Date().toLocaleTimeString("ja-JP")+'</p></div>';
 }
 async function importFresh() {
-    try {
-          const r = await fetch("/api/import?url="+encodeURIComponent("https://www.fresh-club.net/outdoor/detail/1553"));
-          const data = await r.json();
-          if (!data.models || !data.models.length) return;
-          models = data.models.map((m,i) => Object.assign({}, m, {
-                  id:"fresh"+i,
-                  status:i%3===0?"shooting":i%3===1?"break":"preparing",
-                  publishStatus:m.publishStatus || "confirm",
-                  mapX:[22,48,74,28,55,80,23,52,78][i%9],
-                  mapY:[24,23,25,48,45,50,72,70,74][i%9],
-                  parts:m.parts && m.parts.length ? m.parts : ["1\u90e8"]
-          }));
-          selected = models[0].id;
-          render();
-    } catch(e) {}
+      try {
+              const r = await fetch("/api/import?url="+encodeURIComponent("https://www.fresh-club.net/outdoor/detail/1553"));
+              const data = await r.json();
+              if (!data.models || !data.models.length) return;
+              models = data.models.map((m,i) => Object.assign({}, m, {
+                        id:"fresh"+i,
+                        status:i%3===0?"shooting":i%3===1?"break":"preparing",
+                        publishStatus:m.publishStatus || "confirm",
+                        mapX:[22,48,74,28,55,80,23,52,78][i%9],
+                        mapY:[24,23,25,48,45,50,72,70,74][i%9],
+                        parts:m.parts && m.parts.length ? m.parts : ["1\u90e8"]
+              }));
+              selected = models[0].id;
+              render();
+      } catch(e) {}
 }
 function moveDemo() {
-    tick++;
-    models.forEach((m,i) => { m.mapX = Math.max(12, Math.min(88, m.mapX + Math.sin(tick+i)*3)); m.mapY = Math.max(16, Math.min(84, m.mapY + Math.cos(tick+i)*2)); });
-    render();
+      tick++;
+      models.forEach((m,i) => { m.mapX = Math.max(12, Math.min(88, m.mapX + Math.sin(tick+i)*3)); m.mapY = Math.max(16, Math.min(84, m.mapY + Math.cos(tick+i)*2)); });
+      render();
 }
 function setup() {
-    unlock();
-    $("#unlockAccess")?.addEventListener("click", () => { if ($("#accessCode").value.trim() === KEY) unlock(); });
-    $("#lineShare").href = "https://social-plugins.line.me/lineit/share?url="+encodeURIComponent(location.origin+location.pathname+"?key="+KEY+"&view=customer");
-    document.querySelector('[data-tab="guest"]')?.click();
-    document.addEventListener("click", e => { const card = e.target.closest("[data-id]"); if (card && !e.target.closest("a")) { selected = card.dataset.id; render(); } });
-    $("#search")?.addEventListener("input", render);
-    $("#demoMove")?.addEventListener("click", moveDemo);
-    seed();
-    render();
-    importFresh();
+      unlock();
+      $("#unlockAccess")?.addEventListener("click", () => { if ($("#accessCode").value.trim() === KEY) unlock(); });
+      $("#lineShare").href = "https://social-plugins.line.me/lineit/share?url="+encodeURIComponent(location.origin+location.pathname+"?key="+KEY+"&view=customer");
+      document.querySelectorAll(".tab").forEach(btn => {
+              btn.addEventListener("click", () => {
+                        document.querySelectorAll(".tab").forEach(x => x.classList.remove("active"));
+                        document.querySelectorAll(".page").forEach(x => x.classList.remove("active"));
+                        btn.classList.add("active");
+                        $("#" + btn.dataset.tab)?.classList.add("active");
+              });
+      });
+      document.querySelector('[data-tab="guest"]')?.click();
+      document.addEventListener("click", e => { const card = e.target.closest("[data-id]"); if (card && !e.target.closest("a")) { selected = card.dataset.id; render(); } });
+      $("#search")?.addEventListener("input", render);
+      $("#demoMove")?.addEventListener("click", moveDemo);
+      seed();
+      render();
+      importFresh();
 }
 setup();
