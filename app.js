@@ -2,7 +2,7 @@ import * as pdfjsLib from "https://cdn.jsdelivr.net/npm/pdfjs-dist@5.6.205/legac
 
 pdfjsLib.GlobalWorkerOptions.workerSrc = "https://cdn.jsdelivr.net/npm/pdfjs-dist@5.6.205/legacy/build/pdf.worker.min.mjs";
 
-const accessKey = "shiokaze1553";
+const accessKey = "daisatsu0000";
 const params = new URLSearchParams(window.location.search);
 
 const statusLabels = {
